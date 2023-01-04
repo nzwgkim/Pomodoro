@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
+import 'package:timer_builder/timer_builder.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -85,22 +87,42 @@ class _HomeScreenState extends State<HomeScreen> {
           Flexible(
             flex: 3,
             child: Center(
-              child: Row(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  IconButton(
-                    iconSize: 120,
-                    color: Theme.of(context).cardColor,
-                    onPressed: isRunning ? onPausePressed : onStartPressed,
-                    icon: isRunning
-                        ? const Icon(Icons.pause_circle_outline)
-                        : const Icon(Icons.play_circle_outline),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        iconSize: 120,
+                        color: Theme.of(context).cardColor,
+                        onPressed: isRunning ? onPausePressed : onStartPressed,
+                        icon: isRunning
+                            ? const Icon(Icons.pause_circle_outline)
+                            : const Icon(Icons.play_circle_outline),
+                      ),
+                      IconButton(
+                        iconSize: 120,
+                        color: Theme.of(context).cardColor,
+                        onPressed: onResetPressed,
+                        icon:
+                            const Icon(Icons.settings_backup_restore_outlined),
+                      ),
+                    ],
                   ),
-                  IconButton(
-                    iconSize: 120,
-                    color: Theme.of(context).cardColor,
-                    onPressed: onResetPressed,
-                    icon: const Icon(Icons.settings_backup_restore_outlined),
+                  TimerBuilder.periodic(
+                    const Duration(seconds: 1),
+                    builder: (context) {
+                      return Text(
+                        formatDate(
+                            DateTime.now(), [hh, ':', nn, ':', ss, ' ', am]),
+                        style: TextStyle(
+                          color: Theme.of(context).cardColor,
+                          fontSize: 50,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
